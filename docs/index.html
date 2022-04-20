@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title> 我的博客</title>
+      <title> 好好学习、天天向上</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/" />
@@ -79,10 +79,178 @@
   <section class="outer">
   
   
+  
+
+<div class="notice" style="margin-top:50px">
+    <i class="ri-heart-fill"></i>
+    <div class="notice-content" id="broad"></div>
+</div>
+<script type="text/javascript">
+    fetch('https://v1.hitokoto.cn')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("broad").innerHTML = data.hitokoto;
+        })
+        .catch(console.error)
+</script>
+
+<style>
+    .notice {
+        padding: 20px;
+        border: 1px dashed #e6e6e6;
+        color: #969696;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+        background: #fbfbfb50;
+        border-radius: 10px;
+    }
+
+    .notice i {
+        float: left;
+        color: #999;
+        font-size: 16px;
+        padding-right: 10px;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+
+    .notice-content {
+        display: initial;
+        vertical-align: middle;
+    }
+</style>
+  
   <article class="articles">
     
     
     
+    
+    <article
+  id="post-工具安装/rocketMQ V4.7安装过程"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2022/04/21/%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85/rocketMQ%20V4.7%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B/"
+    >Centos RocketMQ V4.7 二进制包安装过程</a> 
+</h2>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/04/21/%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85/rocketMQ%20V4.7%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B/" class="article-date">
+  <time datetime="2022-04-20T16:00:00.000Z" itemprop="datePublished">2022-04-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85/">工具安装</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h3 id="1、下载二进制包方式安装"><a href="#1、下载二进制包方式安装" class="headerlink" title="1、下载二进制包方式安装"></a>1、下载二进制包方式安装</h3><ul>
+<li><p>下载地址：<a target="_blank" rel="noopener" href="https://archive.apache.org/dist/rocketmq/4.7.0/rocketmq-all-4.7.0-bin-release.zip">https://archive.apache.org/dist/rocketmq/4.7.0/rocketmq-all-4.7.0-bin-release.zip</a></p>
+</li>
+<li><p>上传到服务器/home/tools目录</p>
+</li>
+<li><p>解压缩zip安装包到/usr/software目录</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip -d /usr/software rocketmq-all-4.4.0-bin-release.zip</span><br></pre></td></tr></table></figure>
+<h3 id="二、修改配置文件"><a href="#二、修改配置文件" class="headerlink" title="二、修改配置文件"></a>二、修改配置文件</h3><h4 id="1、修改JVM内存配置"><a href="#1、修改JVM内存配置" class="headerlink" title="1、修改JVM内存配置"></a>1、修改JVM内存配置</h4><p>RocketMQ默认的虚拟机内存较大，启动Broker如果因为内存不足失败，需要编辑如下两个配置文件，修改JVM内存大小。</p>
+<ul>
+<li>进入/usr/software目录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/software</span><br><span class="line"># 编辑runbroker.sh和runserver.sh修改默认JVM大小</span><br><span class="line">vi runbroker.sh</span><br><span class="line">vi runserver.sh</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参考设置：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JAVA_OPT=&quot;$&#123;JAVA_OPT&#125; -server -Xms256m -Xmx256m -Xmn128m -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=320m&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、修改broker网络配置文件"><a href="#2、修改broker网络配置文件" class="headerlink" title="2、修改broker网络配置文件"></a>2、修改broker网络配置文件</h4><p>broker默认使用局域网ip进行内部通信，如果需要远程访问，需要修改conf目录下的broker.conf配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd conf</span><br><span class="line">vi broker.conf</span><br><span class="line">#增加两行</span><br><span class="line">namesrvAddr = 218.242.1.236:9876</span><br><span class="line">brokerIP1 = 218.242.1.236</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、启动和关闭服务命令"><a href="#三、启动和关闭服务命令" class="headerlink" title="三、启动和关闭服务命令"></a>三、启动和关闭服务命令</h3><h4 id="1、启动NameServer"><a href="#1、启动NameServer" class="headerlink" title="1、启动NameServer"></a>1、启动NameServer</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nohup sh bin/mqnamesrv &amp;</span><br><span class="line">#查看启动日志</span><br><span class="line">tail -f ~/logs/rocketmqlogs/namesrv.log</span><br></pre></td></tr></table></figure>
+<h4 id="2、启动Broker"><a href="#2、启动Broker" class="headerlink" title="2、启动Broker"></a>2、启动Broker</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 启动Broker </span><br><span class="line">nohup sh ./bin/mqbroker -c ./conf/broker.conf &amp;</span><br><span class="line">#查看启动日志 </span><br><span class="line">tail -f ~/logs/rocketmqlogs/broker.log </span><br></pre></td></tr></table></figure>
+
+<h3 id="3、停止服务"><a href="#3、停止服务" class="headerlink" title="3、停止服务"></a>3、停止服务</h3><h4 id="1、关闭RocketMQ-NAME"><a href="#1、关闭RocketMQ-NAME" class="headerlink" title="1、关闭RocketMQ NAME"></a>1、关闭RocketMQ NAME</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh bin/mqshutdown namesrv</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、关闭RocketMQ-broker"><a href="#2、关闭RocketMQ-broker" class="headerlink" title="2、关闭RocketMQ broker"></a>2、关闭RocketMQ broker</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh bin/mqshutdown broker</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、测试RocketMQ"><a href="#四、测试RocketMQ" class="headerlink" title="四、测试RocketMQ"></a>四、测试RocketMQ</h3><h4 id="1、发送消息"><a href="#1、发送消息" class="headerlink" title="1、发送消息"></a>1、发送消息</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 1.设置环境变量</span><br><span class="line">export NAMESRV_ADDR=localhost:9876</span><br><span class="line"># 2.使用安装包的Demo发送消息</span><br><span class="line">sh bin/tools.sh org.apache.rocketmq.example.quickstart.Producer</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-接收消息"><a href="#2-接收消息" class="headerlink" title="2 接收消息"></a>2 接收消息</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 1.设置环境变量</span><br><span class="line">export NAMESRV_ADDR=localhost:9876</span><br><span class="line"># 2.接收消息</span><br><span class="line">sh bin/tools.sh org.apache.rocketmq.example.quickstart.Consumer</span><br></pre></td></tr></table></figure>
+
+<h3 id="五、安装控制台"><a href="#五、安装控制台" class="headerlink" title="五、安装控制台"></a>五、安装控制台</h3><h4 id="1、下载控制台源码"><a href="#1、下载控制台源码" class="headerlink" title="1、下载控制台源码"></a>1、下载控制台源码</h4><ul>
+<li><p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq-externals/releases/tag/rocketmq-console-1.0.0">https://github.com/apache/rocketmq-externals/releases/tag/rocketmq-console-1.0.0</a></p>
+<h4 id="2、编译生成jar文件"><a href="#2、编译生成jar文件" class="headerlink" title="2、编译生成jar文件"></a>2、编译生成jar文件</h4></li>
+<li><p>上传jar到服务器/usr/software目录</p>
+</li>
+</ul>
+<h3 id="3、运行控制台"><a href="#3、运行控制台" class="headerlink" title="3、运行控制台"></a>3、运行控制台</h3><ul>
+<li>需要编译安装，默认端口8080</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar rocketmq-console-ng-1.0.0.jar</span><br></pre></td></tr></table></figure>
+
+<h3 id="六、RocketMQ使用到的相关端口"><a href="#六、RocketMQ使用到的相关端口" class="headerlink" title="六、RocketMQ使用到的相关端口"></a>六、RocketMQ使用到的相关端口</h3><h3 id="1、如果使用的云服务，需要开通相关端口"><a href="#1、如果使用的云服务，需要开通相关端口" class="headerlink" title="1、如果使用的云服务，需要开通相关端口"></a>1、如果使用的云服务，需要开通相关端口</h3><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>端口</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>8080</td>
+<td>访问控制台web页面</td>
+</tr>
+<tr>
+<td>2</td>
+<td>9876</td>
+<td>客户端访问NameServer需要用到</td>
+</tr>
+<tr>
+<td>3</td>
+<td>10911</td>
+<td>broker默认端口</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10909</td>
+<td>broker默认端口</td>
+</tr>
+</tbody></table>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RocketMQ/" rel="tag">RocketMQ</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+    
+</article>
+
     
     <article
   id="post-开源软件/国产相关开源软件"
@@ -107,7 +275,11 @@
     <div class="article-meta">
       <a href="/2022/04/19/%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6/%E5%9B%BD%E4%BA%A7%E7%9B%B8%E5%85%B3%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6/" class="article-date">
   <time datetime="2022-04-18T16:00:00.000Z" itemprop="datePublished">2022-04-19</time>
-</a>    
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%BC%80%E6%BA%90%E8%BD%AF%E4%BB%B6/">开源软件</a>
+  </div>
+   
     </div>
       
     <div class="article-entry" itemprop="articleBody">
@@ -151,7 +323,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2020-2022
+        2022
         <i class="ri-heart-fill heart_icon"></i> 你猜
       </li>
     </ul>
@@ -195,7 +367,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/images/ayer-side.svg" alt="我的博客"></a>
+    <a href="/"><img src="/images/ayer-side.svg" alt="好好学习、天天向上"></a>
   </div>
   
   <ul class="nav nav-main">
